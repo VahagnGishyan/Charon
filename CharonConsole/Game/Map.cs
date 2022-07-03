@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
+using Utility;
+using Output;
+
 namespace Game
 {
-
 
     public class Map
     {
@@ -38,14 +40,14 @@ namespace Game
             return (IsSpace(loc));
         }
 
-        public Game.ConsolePoint GetCPoint(Location loc)
+        public ConsolePoint GetCPoint(Location loc)
         {
             return (Points[loc.AbscissaValue.Value, loc.OrdinateValue.Value]);
         }
 
         public Location HeroStartLocation { get; }
 
-        private Game.ConsolePoint[,] Points { get; set; }
+        private ConsolePoint[,] Points { get; set; }
 
         //////////////////////////////////////////////////////////////////////
         

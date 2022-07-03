@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Game
+namespace Utility
 {
     public class Height
     {
@@ -39,13 +39,13 @@ namespace Game
         {
 
         }
-        public Size(Game.Height height, Game.Weight weight)
+        public Size(Utility.Height height, Utility.Weight weight)
         {
             HeightValue = height;
             WeightValue = weight;
         }
 
-        public Game.Height HeightValue { get; set; }
-        public Game.Weight WeightValue { get; set; }
+        public Utility.Height HeightValue { get; set; }
+        public Utility.Weight WeightValue { get; set; }
     }
 }

@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
+using Output;
+using Utility;
+
 namespace Game
 {
     public class Process
@@ -34,7 +37,7 @@ namespace Game
             int height = size.HeightValue.Value + 2;
             int weight = size.WeightValue.Value + 2;
 
-            Game.Console.SetWindowSize(new Size(new Height(height), new Weight(weight)));
+            Output.Console.SetWindowSize(new Size(new Height(height), new Weight(weight)));
 
             // print horizontal
             int upBorderOrd = Loc.OrdinateValue.Value;
@@ -46,11 +49,11 @@ namespace Game
 
 
                 loc.OrdinateValue.Value = upBorderOrd;
-                Game.Console.SetCursorPosition(loc);
-                Game.Console.Write(((char)ConsoleSymbols.Border));
+                Output.Console.SetCursorPosition(loc);
+                Output.Console.Write(((char)ConsoleSymbols.Border));
                 loc.OrdinateValue.Value = downBorderOrd;
-                Game.Console.SetCursorPosition(loc);
-                Game.Console.Write(((char)ConsoleSymbols.Border));
+                Output.Console.SetCursorPosition(loc);
+                Output.Console.Write(((char)ConsoleSymbols.Border));
             }
 
             // print vertical
@@ -61,14 +64,14 @@ namespace Game
                 ++loc.OrdinateValue.Value)
             {
                 loc.AbscissaValue.Value = leftBorderAbs;
-                Console.SetCursorPosition(loc);
-                Console.Write(((char)ConsoleSymbols.Border));
+                Output.Console.SetCursorPosition(loc);
+                Output.Console.Write(((char)ConsoleSymbols.Border));
                 loc.AbscissaValue.Value = rightBorderAbs;
-                Console.SetCursorPosition(loc);
-                Console.Write(((char)ConsoleSymbols.Border));
+                Output.Console.SetCursorPosition(loc);
+                Output.Console.Write(((char)ConsoleSymbols.Border));
             }
 
-            Game.Console.SetDefaultCursorPosition();
+            Output.Console.SetDefaultCursorPosition();
         }
 
         public void AddMapInConsole()
@@ -82,8 +85,8 @@ namespace Game
                     Location loc = new Location(new Ordinate(iLine), new Abscissa(iItr));
                     cobj = Map.GetCPoint(loc);
                     SetCursorPositionInBorder(loc);
-                    Game.Console.Write(cobj);
-                    Game.Console.SetDefaultState();
+                    Output.Console.Write(cobj);
+                    Output.Console.SetDefaultState();
                 }
             }
         }
@@ -99,7 +102,7 @@ namespace Game
         {
             Hero.Loc = Map.HeroStartLocation;
             MoveCharectorInConsole(Hero);
-            Game.Console.SetDefaultState();
+            Output.Console.SetDefaultState();
         }
 
         public bool IsWithinBorder(Location loc)
@@ -146,15 +149,15 @@ namespace Game
             locInBorder.AbscissaValue.Value += 1;
             locInBorder.OrdinateValue.Value += 1;
 
-            Game.Console.SetCursorPosition(locInBorder);
+            Output.Console.SetCursorPosition(locInBorder);
         }
 
         public void MoveCharectorInConsole(Charector charector)
         {
             SetCursorPositionInBorder(charector.Loc);
-            Game.Console.SetConsoleColor(charector.BackgroundColor, charector.ForegroundColor);
-            Game.Console.Write(charector.Symbol);
-            Game.Console.SetDefaultState();
+            Output.Console.SetConsoleColor(charector.BackgroundColor, charector.ForegroundColor);
+            Output.Console.Write(charector.Symbol);
+            Output.Console.SetDefaultState();
         }
 
         public void MoveCharectorInConsole(Charector charector, Location loc)
@@ -180,7 +183,7 @@ namespace Game
                 if (IsWithinBorder(newLoc) && IsMovable(newLoc))
                 {
                     SetCursorPositionInBorder(charector.Loc);
-                    Console.Write(charector.LastSymbol);
+                    Output.Console.Write(charector.LastSymbol);
                     MoveCharectorInConsole(charector, newLoc);
                 }
             }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Game
+namespace Utility
 {
     public class Ordinate
     {
@@ -38,7 +38,7 @@ namespace Game
             return ((loc.OrdinateValue.Value >= 0) && (loc.AbscissaValue.Value >= 0));
         }
 
-        public Game.Ordinate OrdinateValue { get; set; }
-        public Game.Abscissa AbscissaValue { get; set; }
+        public Utility.Ordinate OrdinateValue { get; set; }
+        public Utility.Abscissa AbscissaValue { get; set; }
     }
 }

@@ -1,17 +1,18 @@
 ﻿
 using System;
+using Utility;
 
-namespace Game
+namespace Output
 {
-    enum ConsoleSymbols
+    public enum ConsoleSymbols
     {
         Border = '#',
-        Space = ' ',
-        Fence = 'F'
+        Space  = ' ',
+        Fence  = 'F'
     }
     public class ConsolePoint
     {
-        public ConsolePoint(char         symbol,
+        public ConsolePoint(char symbol,
                             ConsoleColor foregroundColor = ConsoleColor.White,
                             ConsoleColor backgroundColor = ConsoleColor.Black)
         {
@@ -27,7 +28,7 @@ namespace Game
 
     public class ConsoleObject : ConsolePoint
     {
-        public ConsoleObject(Location loc, char symbol, ConsoleColor foregroundColor, ConsoleColor backgroundColor) : 
+        public ConsoleObject(Utility.Location loc, char symbol, ConsoleColor foregroundColor, ConsoleColor backgroundColor) :
             base(symbol, foregroundColor, backgroundColor)
         {
             Loc = loc;
@@ -38,7 +39,7 @@ namespace Game
 
     public static class Console
     {
-        public static void SetWindowSize(Game.Size size)
+        public static void SetWindowSize(Utility.Size size)
         {
             System.Console.SetWindowSize(size.HeightValue.Value, size.WeightValue.Value);
         }
@@ -67,14 +68,14 @@ namespace Game
             //}
             // temp
             Location loc = new Location(new Ordinate(0), new Abscissa(0));
-            Game.Console.SetCursorPosition(loc);
+            Console.SetCursorPosition(loc);
             //Console.SetCursorPosition(Loc.AbscissaValue.Value, Loc.OrdinateValue.Value);
         }
 
         public static void SetDefaultState()
         {
             SetDefaultCursorPosition();
-            Game.Console.SetDefaultConsoleColor();
+            Console.SetDefaultConsoleColor();
         }
 
         public static void Write(char symbol)
@@ -84,8 +85,8 @@ namespace Game
 
         public static void Write(ConsolePoint point)
         {
-            Game.Console.SetConsoleColor(point.BackgroundColor, point.ForegroundColor);
-            Game.Console.Write(point.Symbol);
+            Output.Console.SetConsoleColor(point.BackgroundColor, point.ForegroundColor);
+            Output.Console.Write(point.Symbol);
         }
 
         public static void SetCursorPosition(Location loc)

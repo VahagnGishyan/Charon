@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.Text;
 
+using Output;
+using Utility;
+
 namespace Game
 {
-
-
-    public class Charector : ConsoleObject
+    public class Charector :  ConsoleObject
     {
         public Charector(Location loc, char symbol, ConsoleColor foregroundColor, ConsoleColor backgroundColor) :
             base(loc, symbol, foregroundColor, backgroundColor)
         {
-            LastSymbol      = ((char)ConsoleSymbols.Space);
+            LastSymbol      = ((char)Output.ConsoleSymbols.Space);
         }
 
         public Charector(Charector charector) : 

@@ -1,13 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Console\Output.csproj" />
     <ProjectReference Include="..\Loging\Loging.csproj" />
-    <ProjectReference Include="..\UserInput\UserInput.csproj" />
     <ProjectReference Include="..\Utility\Utility.csproj" />
   </ItemGroup>
 
