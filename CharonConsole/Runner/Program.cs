@@ -54,9 +54,10 @@ namespace Runner
 }
 
 // TODO
-// exits border, map
-// charactor
-// interactiv map
-// 
-// zombies
+// Input, W,D,S,A, ctrl, shift, alt
+// Game.Map       <= Console
+// Game.Charactor <= Hero
+// Game.Map       <= Interactive
+// Game.Charactor <= Zombies
+// Game.Charactor <= Interactive Hero
 //
