@@ -41,7 +41,7 @@ namespace Output
     {
         public static void SetWindowSize(Utility.Size size)
         {
-            System.Console.SetWindowSize(size.HeightValue.Value, size.WeightValue.Value);
+            System.Console.SetWindowSize(size.WeightValue.Value, size.HeightValue.Value);
         }
 
         public static void SetDefaultConsoleColor()

@@ -13,15 +13,11 @@ namespace Runner
         static void Main(string[] args)
         {
             Loger.WriteLineMessage("Start Main()");
-            // temp
-            System.Console.WriteLine("Start Main()");
 
-            //Process process = Game.Content.MakeEmpty();
-            //Process process;
-            //process.SetMap(Game.Content.CreateMap.Smile());
-            //process.SetConsoleSize();
-            //process.AddBorderInConsole();
-            //process.AddMapInConsole();
+            //Process.SetMap(Game.Content.MakeEmpty());
+            Process.SetMap(Game.Content.Creeper());
+            Process.PrintBorder();
+            Process.PrintMap();
             //process.AddHeroInConsole();
 
             //process.StartGame();
@@ -31,15 +27,6 @@ namespace Runner
                 //process.MoveHeroPosition(input);
                 //Console.SetCursorPosition(myCharectorLocatin.OrdinateValue.Value, myCharectorLocatin.AbscissaValue.Value);
                 // Console.Write(' ');
-
-                //switch (input.Key)
-                //{
-                //    case ConsoleKey.W: --myCharectorLocatin.AbscissaValue.Value; break;
-                //    case ConsoleKey.D: ++myCharectorLocatin.OrdinateValue.Value; break;
-                //    case ConsoleKey.S: ++myCharectorLocatin.AbscissaValue.Value; break;
-                //    case ConsoleKey.A: --myCharectorLocatin.OrdinateValue.Value; break;
-                //    default: break;
-                //}
 
                 Input.Keyboard.UserPass();
             }

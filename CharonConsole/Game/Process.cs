@@ -7,47 +7,46 @@ using Utility;
 
 namespace Game
 {
-    public class Process
+    public static class Process
     {
-        public Process() { }
+        static Process() { }
 
-        public void SetMap(Game.Map map)
+        public static void SetMap(Game.Map map)
         {
             Map = map;
         }
 
-        public void AddHero(Game.Hero hero)
+        public static void SetHero(Game.Hero hero)
         {
-            Hero = new Hero(hero);
+            Hero = hero;
         }
 
-        public void AddCharector(Charector charector)
+        public static void AddCharector(Charector charector)
         {
             if(Charectors == null)
             {
                 Charectors = new List<Charector>();
             }
-            Charectors.Add(new Charector(charector));
+            Charectors.Add(charector);
         }
 
-
-        public void PrintBorder()
+        private static void SetWindowSizeForMapSize(Size size)
         {
-            Size size = Map.GetSize();
-            int height = size.HeightValue.Value + 2;
-            int weight = size.WeightValue.Value + 2;
+            Output.Console.SetWindowSize(new Size(new Height(size.HeightValue.Value + 2), 
+                                         new Weight(size.WeightValue.Value + 2)));
+        }
 
-            Output.Console.SetWindowSize(new Size(new Height(height), new Weight(weight)));
+        private static void PrintHorizontalBorder(Size size)
+        {
+            int height = size.HeightValue.Value;
+            int weight = size.WeightValue.Value;
 
-            // print horizontal
-            int upBorderOrd = Loc.OrdinateValue.Value;
-            int downBorderOrd = Loc.OrdinateValue.Value + weight - 1;
-            for (Location loc = new Location(new Ordinate(0), new Abscissa(Loc.AbscissaValue.Value));
-                loc.AbscissaValue.Value < height; 
+            int upBorderOrd   = Loc.OrdinateValue.Value;
+            int downBorderOrd = Loc.OrdinateValue.Value + weight + 1;
+            for (Location loc = new Location(new Ordinate(Loc.OrdinateValue.Value), new Abscissa(Loc.AbscissaValue.Value));
+                loc.AbscissaValue.Value < weight + 2;
                 ++loc.AbscissaValue.Value)
             {
-
-
                 loc.OrdinateValue.Value = upBorderOrd;
                 Output.Console.SetCursorPosition(loc);
                 Output.Console.Write(((char)ConsoleSymbols.Border));
@@ -55,12 +54,17 @@ namespace Game
                 Output.Console.SetCursorPosition(loc);
                 Output.Console.Write(((char)ConsoleSymbols.Border));
             }
+        }
 
-            // print vertical
-            int leftBorderAbs  = Loc.AbscissaValue.Value;
-            int rightBorderAbs = Loc.AbscissaValue.Value + height - 1;
-            for (Location loc = new Location(new Ordinate(Loc.OrdinateValue.Value), new Abscissa(0));
-                loc.OrdinateValue.Value < weight;
+        private static void PrintVerticallBorder(Size size)
+        {
+            int height = size.HeightValue.Value;
+            int weight = size.WeightValue.Value;
+
+            int leftBorderAbs = Loc.AbscissaValue.Value;
+            int rightBorderAbs = Loc.AbscissaValue.Value + height + 1;
+            for (Location loc = new Location(new Ordinate(Loc.OrdinateValue.Value + 1), new Abscissa(Loc.AbscissaValue.Value));
+                loc.OrdinateValue.Value < height + 1;
                 ++loc.OrdinateValue.Value)
             {
                 loc.AbscissaValue.Value = leftBorderAbs;
@@ -70,19 +74,31 @@ namespace Game
                 Output.Console.SetCursorPosition(loc);
                 Output.Console.Write(((char)ConsoleSymbols.Border));
             }
+        }
+
+        public static void PrintBorder()
+        {
+            Size size = Map.GetSize();
+
+            SetWindowSizeForMapSize(size);
+
+            PrintHorizontalBorder  (size);
+            PrintVerticallBorder   (size);
 
             Output.Console.SetDefaultCursorPosition();
         }
 
-        public void AddMapInConsole()
+        public static void PrintMap()
         {
             var size = Map.GetSize();
             ConsolePoint cobj;
+            Location loc = new Location(new Ordinate(0), new Abscissa(0));
             for (int iLine = 0; iLine < size.HeightValue.Value; ++iLine)
             {
+                loc.OrdinateValue.Value = iLine;
                 for (int iItr = 0; iItr < size.WeightValue.Value; ++iItr)
                 {
-                    Location loc = new Location(new Ordinate(iLine), new Abscissa(iItr));
+                    loc.AbscissaValue.Value = iItr;
                     cobj = Map.GetCPoint(loc);
                     SetCursorPositionInBorder(loc);
                     Output.Console.Write(cobj);
@@ -92,20 +108,20 @@ namespace Game
         }
 
 
-        public void StartGame()
+        public static void StartGame()
         {
             // MainCharector-Hero
-            AddHeroInConsole();
+            PrintHero();
         }
 
-        public void AddHeroInConsole()
+        public static void PrintHero()
         {
             Hero.Loc = Map.HeroStartLocation;
             MoveCharectorInConsole(Hero);
             Output.Console.SetDefaultState();
         }
 
-        public bool IsWithinBorder(Location loc)
+        public static bool IsWithinBorder(Location loc)
         {
             var size = Map.GetSize();
             return (Location.IsValid(loc) &&
@@ -113,37 +129,37 @@ namespace Game
                     (size.WeightValue.Value > loc.OrdinateValue.Value));
         }
 
-        public bool IsMovable(Location loc)
+        public static bool IsMovable(Location loc)
         {
             return (Map.IsMovable(loc));
         }
 
-        public Location MoveRight(Location loc)
+        public static Location MoveRight(Location loc)
         {
             Location newLoc = new Location(loc);
             newLoc.AbscissaValue.Value += 1;
             return (newLoc);
         }
-        public Location MoveLeft(Location loc)
+        public static Location MoveLeft(Location loc)
         {
             Location newLoc = new Location(loc);
             newLoc.AbscissaValue.Value -= 1;
             return (newLoc);
         }
-        public Location MoveUp(Location loc)
+        public static Location MoveUp(Location loc)
         {
             Location newLoc = new Location(loc);
             newLoc.OrdinateValue.Value -= 1;
             return (newLoc);
         }
-        public Location MoveDown(Location loc)
+        public static Location MoveDown(Location loc)
         {
             Location newLoc = new Location(loc);
             newLoc.OrdinateValue.Value += 1;
             return (newLoc);
         }
 
-        public void SetCursorPositionInBorder(Location loc)
+        public static void SetCursorPositionInBorder(Location loc)
         {
             Location locInBorder = new Location(loc);
             locInBorder.AbscissaValue.Value += 1;
@@ -152,7 +168,7 @@ namespace Game
             Output.Console.SetCursorPosition(locInBorder);
         }
 
-        public void MoveCharectorInConsole(Charector charector)
+        public static void MoveCharectorInConsole(Charector charector)
         {
             SetCursorPositionInBorder(charector.Loc);
             Output.Console.SetConsoleColor(charector.BackgroundColor, charector.ForegroundColor);
@@ -160,13 +176,13 @@ namespace Game
             Output.Console.SetDefaultState();
         }
 
-        public void MoveCharectorInConsole(Charector charector, Location loc)
+        public static void MoveCharectorInConsole(Charector charector, Location loc)
         {
             charector.Loc = loc;
             MoveCharectorInConsole(charector);
         }
 
-        public void MoveCharector(Charector charector, System.ConsoleKeyInfo input)
+        public static void MoveCharector(Charector charector, System.ConsoleKeyInfo input)
         {
             Location newLoc = null;
             switch (input.Key)
@@ -189,14 +205,14 @@ namespace Game
             }
         }
 
-        public void MoveHeroPosition(System.ConsoleKeyInfo input)
+        public static void MoveHero(System.ConsoleKeyInfo input)
         {
             MoveCharector(Hero, input);
         }
 
-        private Location Loc        { get; set; } = new Location(new Ordinate(0), new Abscissa(0));
-        Game.Map         Map        { get; set; }
-        List<Charector>  Charectors { get; set; }
-        Charector        Hero       { get; set; }
+        private static Location Loc        { get; set; } = new Location(new Ordinate(0), new Abscissa(0));
+        static Game.Map         Map        { get; set; }
+        static List<Charector>  Charectors { get; set; }
+        static Charector        Hero       { get; set; }
     }
 }

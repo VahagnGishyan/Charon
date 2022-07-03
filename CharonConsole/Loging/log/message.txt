@@ -1,2 +1,12 @@
 Start Main()
-You input Close Main()
+        
+        
+ FF  FF 
+ FF  FF 
+   FF   
+  FFFF  
+  FFFF  
+  F  F  
+User input w
+User input Escape
+Close Main()

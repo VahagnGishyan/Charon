@@ -33,9 +33,18 @@ namespace Input
             return ((LastKey.Modifiers & ConsoleModifiers.Shift) == ConsoleModifiers.Shift);
         }
 
-        private static string InputAsString(ConsoleKeyInfo input)
+        private static string InputAsString()
         {
-            string message = "You input " + input.KeyChar;
+            string symbol = "";
+            if (LastKey.Key != ConsoleKey.Escape)
+            {
+                symbol += LastKey.KeyChar;
+            }
+            else
+            {
+                symbol = "Escape";
+            }
+            string message = $"User input {symbol}";
 
             bool alt     = IsPressedAlt();
             bool control = IsPressedControl();
@@ -55,7 +64,7 @@ namespace Input
         public static void UserPass()
         {
             LastKey = Console.ReadKey(true);
-            Loger.WriteMessage(InputAsString(LastKey));
+            Loger.WriteLineMessage(InputAsString());
         }
 
         private static ConsoleKeyInfo LastKey { get; set; }

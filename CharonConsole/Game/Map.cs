@@ -26,7 +26,8 @@ namespace Game
 
         public Size GetSize()
         {
-            return (new Size(new Height(Points.Length / Points.GetLength(0)), new Weight(Points.GetLength(0))));
+            //temp
+            return (new Size(new Height(Points.GetLength(0)), new Weight(Points.GetLength(1))));
         }
 
         public bool IsSpace(Location loc)
@@ -42,7 +43,7 @@ namespace Game
 
         public ConsolePoint GetCPoint(Location loc)
         {
-            return (Points[loc.AbscissaValue.Value, loc.OrdinateValue.Value]);
+            return (Points[loc.OrdinateValue.Value, loc.AbscissaValue.Value]);
         }
 
         public Location HeroStartLocation { get; }
@@ -64,18 +65,24 @@ namespace Game
 
         }
 
-        public static Map MakeSmile()
+        public static Map MakeCreeper()
         {
             string [] strmap =
-            {
-                "---------",
-                "-F-----F-",
-                "-F-----F-",
-                "---------",
-                "-F-----F-",
-                "-FFFFFFF-",
-                "---------"
+            { // 12345678
+                "        ", // 1
+                "        ", // 2
+                " FF  FF ", // 3
+                " FF  FF ", // 4
+                "   FF   ", // 5
+                "  FFFF  ", // 6
+                "  FFFF  ", // 7
+                "  F  F  ", // 8
             };
+
+            foreach(var line in strmap)
+            {
+                Loging.Loger.WriteLineMessage(line);
+            }
 
             Location heroStartLocation = new Location(new Ordinate(3), new Abscissa(4));
             Size size = new Size(new Height(strmap.Length), new Weight(strmap[0].Length));
@@ -85,6 +92,12 @@ namespace Game
             {
                 for(int iItr = 0; iItr < size.WeightValue.Value; ++iItr)
                 {
+                    char symbol = strmap[iLine][iItr];
+                    if (symbol == '-')
+                    {
+                        map.Points[iLine, iItr].Symbol = ' ';
+                        continue;
+                    }
                     map.Points[iLine, iItr].Symbol = strmap[iLine][iItr];
                 }
             }

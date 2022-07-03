@@ -6,30 +6,31 @@ namespace Game
 {
     public static class Content
     {
-        public static Process MakeEmpty()
+        public static Map MakeEmpty()
         {
             Game.Map map = Map.MakeEmpty();
 
-            Process process = new Process();
-            process.SetMap(map);
+            //Process process = new Process();
+            //process.SetMap(map);
             //Location myCharectorLocatin = new Location(new Ordinate(69), new Abscissa(23));
             //process.AddHero(Game.Hero.MakeDefault(new Location(new Ordinate(5), new Abscissa(5))));
-            process.AddHero(Game.Hero.MakeDefault());
+            //process.AddHero(Game.Hero.MakeDefault());
 
-            return (process);
+            return (map);
         }
 
-        public static Process Smile()
+        public static Map Creeper()
         {
-            Game.Map map = Map.MakeSmile();
+            return (Map.MakeCreeper());
+            //Game.Map map = Map.MakeSmile();
 
-            Process process = new Process();
-            process.SetMap(map);
-            //Location myCharectorLocatin = new Location(new Ordinate(69), new Abscissa(23));
-            //process.AddHero(Game.Hero.MakeDefault(new Location(new Ordinate(5), new Abscissa(5))));
-            process.AddHero(Game.Hero.MakeDefault());
+            //Process process = new Process();
+            //process.SetMap(map);
+            ////Location myCharectorLocatin = new Location(new Ordinate(69), new Abscissa(23));
+            ////process.AddHero(Game.Hero.MakeDefault(new Location(new Ordinate(5), new Abscissa(5))));
+            //process.AddHero(Game.Hero.MakeDefault());
 
-            return (process);
+            //return (process);
         }
     }
 }
