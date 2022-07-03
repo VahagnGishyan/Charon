@@ -5,40 +5,38 @@ namespace Input
 {
     public static class Keyboard
     {
-
-
-        static public bool IsPressed(ConsoleKeyInfo input, ConsoleKey key)
+        static public bool IsPressed(ConsoleKey key)
         {
-            return (input.Key == key);
+            return (LastKey.Key == key);
         }
-        static public bool IsPressedEscape(ConsoleKeyInfo input)
+        static public bool IsPressedEscape()
         {
-            return (input.Key == ConsoleKey.Escape);
+            return (LastKey.Key == ConsoleKey.Escape);
         }
-        static public bool IsPressedEnter(ConsoleKeyInfo input)
+        static public bool IsPressedEnter()
         {
-            return (input.Key == ConsoleKey.Enter);
+            return (LastKey.Key == ConsoleKey.Enter);
         }
 
-        static public bool IsPressedAlt(ConsoleKeyInfo input)
+        static public bool IsPressedAlt()
         {
-            //return (input.Modifiers == ConsoleModifiers.Alt);
-            return ((input.Modifiers & ConsoleModifiers.Alt) == ConsoleModifiers.Alt);
+            return ((LastKey.Modifiers & ConsoleModifiers.Alt) == ConsoleModifiers.Alt);
         }
-        static public bool IsPressedControl(ConsoleKeyInfo input)
+        static public bool IsPressedControl()
         {
-            //return (input.Modifiers == ConsoleModifiers.Control);
-            return ((input.Modifiers & ConsoleModifiers.Control) == ConsoleModifiers.Control);
+            return ((LastKey.Modifiers & ConsoleModifiers.Control) == ConsoleModifiers.Control);
         }
-        static public bool IsPressedShift(ConsoleKeyInfo input)
+        static public bool IsPressedShift()
         {
-            //return (input.Modifiers == ConsoleModifiers.Shift);
-            return ((input.Modifiers & ConsoleModifiers.Shift) == ConsoleModifiers.Shift);
+            return ((LastKey.Modifiers & ConsoleModifiers.Shift) == ConsoleModifiers.Shift);
         }
 
         public static ConsoleKeyInfo UserPass()
         {
-            return (Console.ReadKey(true));
+            LastKey = Console.ReadKey(true);
+            return (LastKey);
         }
+
+        private static ConsoleKeyInfo LastKey { get; set; }
     }
 }
