@@ -10,25 +10,6 @@ namespace Runner
 {
     class Program
     {
-        public static string InputAsString(ConsoleKeyInfo input)
-        {
-            string message = "You input " + input.KeyChar;
-
-            bool alt     = Input.Keyboard.IsPressedAlt(input);
-            bool control = Input.Keyboard.IsPressedControl(input);
-            bool shift   = Input.Keyboard.IsPressedShift(input);
-
-            if (alt || control || shift)
-            {
-                message += " with";
-                message += alt ? " alt" : "";
-
-                message += control ? alt ? ", control" : " control" : "";
-                message += shift ? alt || control ? ", shift" : " shift" : "";
-            }
-            return (message);
-        }
-
         static void Main(string[] args)
         {
             Loger.WriteLineMessage("Start Main()");
@@ -44,10 +25,8 @@ namespace Runner
             //process.AddHeroInConsole();
 
             //process.StartGame();
-            ConsoleKeyInfo input = Input.Keyboard.UserPass();
-            Loger.WriteMessage(InputAsString(input));
-
-            while (!Input.Keyboard.IsPressedEnter(input))
+            Input.Keyboard.UserPass();
+            while (!Input.Keyboard.IsPressedEscape())
             {
                 //process.MoveHeroPosition(input);
                 //Console.SetCursorPosition(myCharectorLocatin.OrdinateValue.Value, myCharectorLocatin.AbscissaValue.Value);
@@ -62,8 +41,7 @@ namespace Runner
                 //    default: break;
                 //}
 
-                input = Input.Keyboard.UserPass();
-                Loger.WriteMessage(InputAsString(input));
+                Input.Keyboard.UserPass();
             }
 
             Loger.WriteLineMessage("Close Main()");
