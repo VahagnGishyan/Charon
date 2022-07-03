@@ -1,0 +1,3 @@
+Start Main()
+You input Escape
+Close Main()

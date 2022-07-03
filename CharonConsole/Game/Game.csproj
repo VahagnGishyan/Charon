@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Console\Output.csproj" />
     <ProjectReference Include="..\Loging\Loging.csproj" />
+    <ProjectReference Include="..\Output\Output.csproj" />
     <ProjectReference Include="..\UserInput\UserInput.csproj" />
     <ProjectReference Include="..\Utility\Utility.csproj" />
   </ItemGroup>

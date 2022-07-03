@@ -150,7 +150,6 @@ namespace Loging
             MakeException
         }
 
-
         public static void WriteError(string error, WriteErrorMod mod = WriteErrorMod.Unset)
         {
             foreach (var file in FErrorList)
@@ -174,6 +173,20 @@ namespace Loging
             if (mod == WriteErrorMod.MakeException)
             {
                 throw new Exception(error);
+            }
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////////////
+
+        public static void WriteInputMessage(ConsoleKeyInfo input)
+        {
+            if (input.Key != ConsoleKey.Escape)
+            {
+                Loger.WriteLineMessage($"You input {UserInput.Keyboard.CheckInput(input)}");
+            }
+            else
+            {
+                Loger.WriteLineMessage("You input Escape");
             }
         }
 

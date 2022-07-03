@@ -13,19 +13,26 @@ namespace Runner
         static void Main(string[] args)
         {
             Loger.WriteLineMessage("Start Main()");
+            // temp
+            System.Console.WriteLine("Start Main()");
 
             //Process process = Game.Content.MakeEmpty();
-            Process process = Game.Content.Smile();
-            process.PrintBorder();
-            process.AddMapInConsole();
+            //Process process;
+            //process.SetMap(Game.Content.CreateMap.Smile());
+            //process.SetConsoleSize();
+            //process.AddBorderInConsole();
+            //process.AddMapInConsole();
+            //process.AddHeroInConsole();
 
-            process.StartGame();
+            //process.StartGame();
             ConsoleKeyInfo input = UserInput.Keyboard.Input();
+            Loger.WriteInputMessage(input);
+
             while (input.Key != ConsoleKey.Escape)
             {
                 //process.MoveHeroPosition(input);
                 //Console.SetCursorPosition(myCharectorLocatin.OrdinateValue.Value, myCharectorLocatin.AbscissaValue.Value);
-               // Console.Write(' ');
+                // Console.Write(' ');
 
                 //switch (input.Key)
                 //{
@@ -36,15 +43,8 @@ namespace Runner
                 //    default: break;
                 //}
 
-                if (input.Key != ConsoleKey.Escape)
-                {
-                    Loger.WriteLineMessage($"You input {UserInput.Keyboard.CheckInput(input)}");
-                }
-                else
-                {
-                    Loger.WriteLineMessage("You input Escape");
-                }
                 input = UserInput.Keyboard.Input();
+                Loger.WriteInputMessage(input);
             }
 
             Loger.WriteLineMessage("Close Main()");
