@@ -7,9 +7,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Game\Game.csproj" />
+    <ProjectReference Include="..\Input\Input.csproj" />
     <ProjectReference Include="..\Loging\Loging.csproj" />
     <ProjectReference Include="..\Output\Output.csproj" />
-    <ProjectReference Include="..\UserInput\UserInput.csproj" />
     <ProjectReference Include="..\Utility\Utility.csproj" />
   </ItemGroup>
 

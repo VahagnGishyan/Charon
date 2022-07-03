@@ -1,3 +1,2 @@
 Start Main()
-You input Escape
-Close Main()
+You input Close Main()

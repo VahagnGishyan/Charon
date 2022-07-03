@@ -178,17 +178,17 @@ namespace Loging
 
         /////////////////////////////////////////////////////////////////////////////////////////////
 
-        public static void WriteInputMessage(ConsoleKeyInfo input)
-        {
-            if (input.Key != ConsoleKey.Escape)
-            {
-                Loger.WriteLineMessage($"You input {UserInput.Keyboard.CheckInput(input)}");
-            }
-            else
-            {
-                Loger.WriteLineMessage("You input Escape");
-            }
-        }
+        //public static void WriteInputMessage(ConsoleKeyInfo input)
+        //{
+        //    if (input.Key != ConsoleKey.Escape)
+        //    {
+        //        Loger.WriteLineMessage($"You input {Input.Keyboard.CheckInput(input)}");
+        //    }
+        //    else
+        //    {
+        //        Loger.WriteLineMessage("You input Escape");
+        //    }
+        //}
 
         /////////////////////////////////////////////////////////////////////////////////////////////
         //

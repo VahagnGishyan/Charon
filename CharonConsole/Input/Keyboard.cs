@@ -1,10 +1,12 @@
 ﻿
 using System;
 
-namespace UserInput
+namespace Input
 {
     public static class Keyboard
     {
+
+
         static public bool IsPressed(ConsoleKeyInfo input, ConsoleKey key)
         {
             return (input.Key == key);
@@ -33,26 +35,8 @@ namespace UserInput
             //return (input.Modifiers == ConsoleModifiers.Shift);
             return ((input.Modifiers & ConsoleModifiers.Shift) == ConsoleModifiers.Shift);
         }
-        static public string CheckInput(ConsoleKeyInfo input)
-        {
-            string message = "You input " + input.KeyChar;
 
-            bool alt = IsPressedAlt(input);
-            bool control = IsPressedControl(input);
-            bool shift = IsPressedShift(input);
-
-            if (alt || control || shift)
-            {
-                message += " with";
-                message += alt ? " alt" : "";
-
-                message += control ? alt ? ", control" : " control" : "";
-                message += shift ? alt || control ? ", shift" : " shift" : "";
-            }
-            return (message);
-        }
-
-        public static ConsoleKeyInfo Input()
+        public static ConsoleKeyInfo UserPass()
         {
             return (Console.ReadKey(true));
         }

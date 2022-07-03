@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace UserInput
+namespace Input
 {
     public static class Mouse
     {

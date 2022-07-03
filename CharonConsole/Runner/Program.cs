@@ -4,12 +4,31 @@ using System.Text;
 
 using Loging;
 using Game;
-using UserInput;
+using Input;
 
 namespace Runner
 {
     class Program
     {
+        public static string InputAsString(ConsoleKeyInfo input)
+        {
+            string message = "You input " + input.KeyChar;
+
+            bool alt     = Input.Keyboard.IsPressedAlt(input);
+            bool control = Input.Keyboard.IsPressedControl(input);
+            bool shift   = Input.Keyboard.IsPressedShift(input);
+
+            if (alt || control || shift)
+            {
+                message += " with";
+                message += alt ? " alt" : "";
+
+                message += control ? alt ? ", control" : " control" : "";
+                message += shift ? alt || control ? ", shift" : " shift" : "";
+            }
+            return (message);
+        }
+
         static void Main(string[] args)
         {
             Loger.WriteLineMessage("Start Main()");
@@ -25,10 +44,10 @@ namespace Runner
             //process.AddHeroInConsole();
 
             //process.StartGame();
-            ConsoleKeyInfo input = UserInput.Keyboard.Input();
-            Loger.WriteInputMessage(input);
+            ConsoleKeyInfo input = Input.Keyboard.UserPass();
+            Loger.WriteMessage(InputAsString(input));
 
-            while (input.Key != ConsoleKey.Escape)
+            while (!Input.Keyboard.IsPressedEnter(input))
             {
                 //process.MoveHeroPosition(input);
                 //Console.SetCursorPosition(myCharectorLocatin.OrdinateValue.Value, myCharectorLocatin.AbscissaValue.Value);
@@ -43,8 +62,8 @@ namespace Runner
                 //    default: break;
                 //}
 
-                input = UserInput.Keyboard.Input();
-                Loger.WriteInputMessage(input);
+                input = Input.Keyboard.UserPass();
+                Loger.WriteMessage(InputAsString(input));
             }
 
             Loger.WriteLineMessage("Close Main()");
