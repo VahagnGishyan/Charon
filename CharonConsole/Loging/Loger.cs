@@ -1,129 +1,226 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Loging
 {
     
-    public class Loger
+    public static class Loger
     {
         /////////////////////////////////////////////////////////////////////////////////////////////
         //
         /////////////////////////////////////////////////////////////////////////////////////////////
 
-        public Loger()
-        {
+        //public class Path
+        //{
+        //    Path() { }
+        //    Path(string path) 
+        //    {
+        //        string ext = System.IO.Path.GetExtension(path);
+        //        StrPath = path;
+        //    }
 
-        }
+        //    public string StrPath { get; set; }
+        //}
 
-        public Loger(string filepathMessage, string filepathWarning, string filepathError)
-        {
-            FileMessage = new StreamWriter(filepathMessage);
-            FileWarning = new StreamWriter(filepathWarning);
-            FileError   = new StreamWriter(filepathError);
-        }
+        //public class DirPath : Path
+        //{
 
-        /////////////////////////////////////////////////////////////////////////////////////////////
-        //
-        /////////////////////////////////////////////////////////////////////////////////////////////
+        //}
 
-        public void OpenFileMessage(string filepathMessage)
-        {
-            FileMessage = new StreamWriter(filepathMessage);
-        }
+        //public class FilePath : Path
+        //{
 
-        public void OpenFileWarning(string filepathWarning)
-        {
-            FileWarning = new StreamWriter(filepathWarning);
-        }
+        //}
 
-        public void OpenFileError(string filepathError)
-        {
-            FileError   = new StreamWriter(filepathError);
-        }
+        //public class MessagePath : FilePath
+        //{
 
-        /////////////////////////////////////////////////////////////////////////////////////////////
-        //
-        /////////////////////////////////////////////////////////////////////////////////////////////
+        //}
 
-        public void WriteMessage(string message)
-        {
-            FileMessage.Write(message);
-        }
-        public void WriteLineMessage(string message)
-        {
-            FileMessage.WriteLine(message);
-        }
+        //public class WarningPath : FilePath
+        //{
 
-        public void WriteWarning(string message)
-        {
-            FileWarning.Write(message);
-        }
-        public void WriteLineWarning(string message)
-        {
-            FileWarning.WriteLine(message);
-        }
+        //}
 
-        public void WriteError(string message)
-        {
-            FileError.Write(message);
-        }
-        public void WriteLineError(string message)
-        {
-            FileError.WriteLine(message);
-        }
+        //public class ErrorPath : FilePath
+        //{
+
+        //}
 
         /////////////////////////////////////////////////////////////////////////////////////////////
-        //
-        /////////////////////////////////////////////////////////////////////////////////////////////
-
-        public static string DefaultLogFilesDir()
+        
+        public static string DefaultLogDirPath()
         {
             return ("D:\\Projects\\Charon\\CharonConsole\\Loging\\log\\");
         }
 
-        public static string DefaultLogFileMessage()
+        /////////////////////////////////////////////////////////////////////////////////////////////
+        //
+        /////////////////////////////////////////////////////////////////////////////////////////////
+
+        static Loger()
         {
-            return (DefaultLogFilesDir() + "message.txt");
+            FMessageList = new List<StreamWriter>();
+            FWarningList = new List<StreamWriter>();
+            FErrorList   = new List<StreamWriter>();
+
+            CreateLogFilesInDir(DefaultLogDirPath());
         }
 
-        public static string DefaultLogFileWarning()
+        public static void AddLogDir(string dirPath)
         {
-            return (DefaultLogFilesDir() + "warning.txt");
+            FileAttributes attr = File.GetAttributes(dirPath);
+            if ((attr & FileAttributes.Directory) != FileAttributes.Directory)
+            {
+                WriteError($"LogDirPath[{dirPath}] isn't a directory", WriteErrorMod.MakeException);
+            }
+
+            CreateLogFilesInDir(dirPath);
         }
 
-        public static string DefaultLogFileError()
+        private static void CreateLogFilesInDir(string dirpath)
         {
-            return (DefaultLogFilesDir() + "error.txt");
-        }
+            string fpmessage = dirpath + "message.txt";
+            string fpwarning = dirpath + "warning.txt";
+            string fperror = dirpath + "error.txt";
 
-        public static Loger MakeDefault()
-        {
-            Loging.Loger file = new Loger(); // (fpMessage, fpWarning, fpError);
-            file.OpenFileMessage(DefaultLogFileMessage());
-            file.OpenFileWarning(DefaultLogFileWarning());
-            file.OpenFileError  (DefaultLogFileError  ());
-
-            return (file);
+            FMessageList.Add(new StreamWriter(fpmessage));
+            FWarningList.Add(new StreamWriter(fpwarning));
+            FErrorList.Add(new StreamWriter(fperror));
         }
 
         /////////////////////////////////////////////////////////////////////////////////////////////
         //
         /////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void Close()
+        public static void AddFMessage(string filepathMessage)
         {
-            FileMessage.Close();
-            FileWarning.Close();
-            FileError  .Close();
+            FMessageList.Add(new StreamWriter(filepathMessage));
+        }
+
+        public static void AddFWarning(string filepathWarning)
+        {
+            FWarningList.Add(new StreamWriter(filepathWarning));
+        }
+
+        public static void AddFError(string filepathError)
+        {
+            FErrorList.Add(new StreamWriter(filepathError));
         }
 
         /////////////////////////////////////////////////////////////////////////////////////////////
         //
         /////////////////////////////////////////////////////////////////////////////////////////////
 
-        private StreamWriter FileMessage { get; set; }
-        private StreamWriter FileWarning { get; set; }
-        private StreamWriter FileError   { get; set; }
+        public static void WriteMessage(string message)
+        {
+            foreach(var file in FMessageList)
+            {
+                file.Write(message);
+            }
+        }
+        public static void WriteLineMessage(string message)
+        {
+            foreach (var file in FMessageList)
+            {
+                file.WriteLine(message);
+            }
+        }
+
+        public static void WriteWarning(string warning)
+        {
+            foreach (var file in FWarningList)
+            {
+                file.Write(warning);
+            }
+        }
+        public static void WriteLineWarning(string warning)
+        {
+            foreach (var file in FWarningList)
+            {
+                file.WriteLine(warning);
+            }
+        }
+
+        public enum WriteErrorMod
+        {
+            Unset,
+            MakeException
+        }
+
+
+        public static void WriteError(string error, WriteErrorMod mod = WriteErrorMod.Unset)
+        {
+            foreach (var file in FErrorList)
+            {
+                file.Write(error);
+            }
+
+            if(mod == WriteErrorMod.MakeException)
+            {
+                throw new Exception(error);
+            }
+        }
+
+        public static void WriteLineError(string error, WriteErrorMod mod = WriteErrorMod.Unset)
+        {
+            foreach (var file in FErrorList)
+            {
+                file.WriteLine(error);
+            }
+
+            if (mod == WriteErrorMod.MakeException)
+            {
+                throw new Exception(error);
+            }
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////////////
+        //
+        /////////////////////////////////////////////////////////////////////////////////////////////
+
+        public static string DefaultLogFMessage()
+        {
+            return (DefaultLogDirPath() + "message.txt");
+        }
+
+        public static string DefaultLogFWarning()
+        {
+            return (DefaultLogDirPath() + "warning.txt");
+        }
+
+        public static string DefaultLogFError()
+        {
+            return (DefaultLogDirPath() + "error.txt");
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////////////
+        //
+        /////////////////////////////////////////////////////////////////////////////////////////////
+
+        private static void CloseFileList(List<StreamWriter> filelist)
+        {
+            foreach(var file in filelist)
+            {
+                file.Close();
+            }
+        }
+
+        public static void Close()
+        {
+            CloseFileList(FMessageList);
+            CloseFileList(FWarningList);
+            CloseFileList(FErrorList);
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////////////
+        //
+        /////////////////////////////////////////////////////////////////////////////////////////////
+
+        private  static List<StreamWriter> FMessageList { get; set; }
+        private  static List<StreamWriter> FWarningList { get; set; }
+        private  static List<StreamWriter> FErrorList   { get; set; }
     }
 }

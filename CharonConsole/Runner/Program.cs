@@ -12,8 +12,7 @@ namespace Runner
     {
         static void Main(string[] args)
         {
-            Loging.Loger file = Loger.MakeDefault(); // (fpMessage, fpWarning, fpError);
-            file.WriteLineMessage("Start Main()");
+            Loger.WriteLineMessage("Start Main()");
 
             //Process process = Game.Content.MakeEmpty();
             Process process = Game.Content.Smile();
@@ -24,7 +23,7 @@ namespace Runner
             ConsoleKeyInfo input = UserInput.Keyboard.Input();
             while (input.Key != ConsoleKey.Escape)
             {
-                process.MoveHeroPosition(input);
+                //process.MoveHeroPosition(input);
                 //Console.SetCursorPosition(myCharectorLocatin.OrdinateValue.Value, myCharectorLocatin.AbscissaValue.Value);
                // Console.Write(' ');
 
@@ -39,17 +38,17 @@ namespace Runner
 
                 if (input.Key != ConsoleKey.Escape)
                 {
-                    file.WriteLineMessage("You input " + UserInput.Keyboard.CheckInput(input));
+                    Loger.WriteLineMessage($"You input {UserInput.Keyboard.CheckInput(input)}");
                 }
                 else
                 {
-                    file.WriteLineMessage("You input Escape");
+                    Loger.WriteLineMessage("You input Escape");
                 }
                 input = UserInput.Keyboard.Input();
             }
 
-            file.WriteLineMessage("Close Main()");
-            file.Close();
+            Loger.WriteLineMessage("Close Main()");
+            Loger.Close();
         }
     }
 }
