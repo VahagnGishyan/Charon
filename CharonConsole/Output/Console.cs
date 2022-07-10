@@ -21,6 +21,11 @@ namespace Output
             BackgroundColor = backgroundColor;
         }
 
+        public ConsolePoint(ConsolePoint point) : this(point.Symbol, point.ForegroundColor, point.BackgroundColor)
+        {
+
+        }
+
         public char Symbol { get; set; }
         public ConsoleColor ForegroundColor { get; set; }
         public ConsoleColor BackgroundColor { get; set; }
@@ -80,6 +85,11 @@ namespace Output
 
         public static void Write(char symbol)
         {
+            System.Console.Write(symbol);
+        }
+        public static void Write(Utility.Location loc, char symbol)
+        {
+            Console.SetCursorPosition(loc);
             System.Console.Write(symbol);
         }
 

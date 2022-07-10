@@ -46,6 +46,11 @@ namespace Game
             return (Points[loc.OrdinateValue.Value, loc.AbscissaValue.Value]);
         }
 
+        public void ChangePoint(Location loc, ConsolePoint point)
+        {
+            Points[loc.OrdinateValue.Value, loc.AbscissaValue.Value] = new ConsolePoint(point);
+        }
+
         public Location HeroStartLocation { get; }
 
         private ConsolePoint[,] Points { get; set; }
@@ -79,7 +84,8 @@ namespace Game
                 "  F  F  ", // 8
             };
 
-            foreach(var line in strmap)
+            Loging.Loger.WriteLineMessage("Make Map");
+            foreach (var line in strmap)
             {
                 Loging.Loger.WriteLineMessage(line);
             }

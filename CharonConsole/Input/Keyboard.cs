@@ -33,17 +33,33 @@ namespace Input
             return ((LastKey.Modifiers & ConsoleModifiers.Shift) == ConsoleModifiers.Shift);
         }
 
+        public static bool IsPressedModifier(ConsoleModifiers modifier)
+        {
+            switch (modifier)
+            {
+                case ConsoleModifiers.Alt: return IsPressedAlt();
+                case ConsoleModifiers.Control: return IsPressedControl();
+                case ConsoleModifiers.Shift: return IsPressedShift();
+            }
+            return false;
+        }
+
+        public static bool IsPressedModifiers()
+        {
+            return (IsPressedAlt() || IsPressedControl() || IsPressedShift());
+        }
+
         private static string InputAsString()
         {
             string symbol = "";
-            if (LastKey.Key != ConsoleKey.Escape)
+            switch (LastKey.Key)
             {
-                symbol += LastKey.KeyChar;
+                //case ConsoleKey.A       : symbol = "Escape";   break;
+                case ConsoleKey.Escape  : symbol = "Escape";   break;
+                case ConsoleKey.Spacebar: symbol = "Spacebar"; break;
+                default                 : symbol += LastKey.KeyChar; break;
             }
-            else
-            {
-                symbol = "Escape";
-            }
+
             string message = $"User input {symbol}";
 
             bool alt     = IsPressedAlt();
@@ -65,6 +81,11 @@ namespace Input
         {
             LastKey = Console.ReadKey(true);
             Loger.WriteLineMessage(InputAsString());
+        }
+
+        public static ConsoleKeyInfo LastPassedKey()
+        {
+            return (LastKey);
         }
 
         private static ConsoleKeyInfo LastKey { get; set; }

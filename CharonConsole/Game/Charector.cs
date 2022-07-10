@@ -47,6 +47,10 @@ namespace Game
 
         public Hero(Hero hero) : base(hero.Loc, hero.Symbol, hero.ForegroundColor, hero.BackgroundColor) { }
 
+        public void Boom()
+        {
+            
+        }
 
         static public Hero MakeDefault(Location loc = null)
         {

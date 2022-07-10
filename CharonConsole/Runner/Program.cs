@@ -18,17 +18,14 @@ namespace Runner
             Process.SetMap(Game.Content.Creeper());
             Process.PrintBorder();
             Process.PrintMap();
-            //process.AddHeroInConsole();
+            Process.SetHero();
+            Process.PrintHero();
 
-            //process.StartGame();
-            Input.Keyboard.UserPass();
+            //Process.StartGame();
+            Process.UserPass();
             while (!Input.Keyboard.IsPressedEscape())
             {
-                //process.MoveHeroPosition(input);
-                //Console.SetCursorPosition(myCharectorLocatin.OrdinateValue.Value, myCharectorLocatin.AbscissaValue.Value);
-                // Console.Write(' ');
-
-                Input.Keyboard.UserPass();
+                Process.UserPass();
             }
 
             Loger.WriteLineMessage("Close Main()");
@@ -39,9 +36,9 @@ namespace Runner
 
 // TODO
 // Input, W,D,S,A, ctrl, shift, alt
-// Game.Map       <= Console
-// Game.Charactor <= Hero
-// Game.Map       <= Interactive
-// Game.Charactor <= Zombies
-// Game.Charactor <= Interactive Hero
+// Game.Map       <= Console          # Done
+// Game.Charactor <= Hero             # Done
+// Game.Map       <= Interactive      # ~Done
+// Game.Charactor <= Zombies          #
+// Game.Charactor <= Interactive Hero # Done
 //
