@@ -171,6 +171,7 @@ namespace Game
 
         public static void WriteInBorder(Location loc, char symbol, CtrlArg state = CtrlArg.Unset)
         {
+
             SetCursorPositionInBorder(loc);
             Output.Console.Write(symbol);
             if(state == CtrlArg.DefaultState)
@@ -179,7 +180,7 @@ namespace Game
             }
         }
 
-        public static void MoveCharectorInConsole(Charector charector)
+    public static void MoveCharectorInConsole(Charector charector)
         {
             SetCursorPositionInBorder(charector.Loc);
             Output.Console.SetConsoleColor(charector.BackgroundColor, charector.ForegroundColor);
@@ -540,7 +541,11 @@ namespace Game
             }
         }
 
-
+        public static void MTHeroPowerFire()
+        {
+            Thread thread = new Thread(HeroPowerFire);
+            thread.Start();
+        }
 
         public static void HeroPowerSpace()
         {
@@ -580,7 +585,7 @@ namespace Game
             {
                 if (Input.Keyboard.IsPressedShift())
                 {
-                    Process.HeroPowerFire();
+                    Process.MTHeroPowerFire();
                 }
                 else
                 {

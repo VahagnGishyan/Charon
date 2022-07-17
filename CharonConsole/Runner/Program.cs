@@ -41,4 +41,5 @@ namespace Runner
 // Game.Map       <= Interactive      # ~Done
 // Game.Charactor <= Zombies          #
 // Game.Charactor <= Interactive Hero # Done
+// Game.Process   <= ReDesign         # 
 //

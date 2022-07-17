@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Threading;
 using Utility;
 
 namespace Output
@@ -101,7 +102,13 @@ namespace Output
 
         public static void SetCursorPosition(Location loc)
         {
+            while (!isConsoleFree) { Thread.Sleep(5); }
+            isConsoleFree = false;
             System.Console.SetCursorPosition(loc.AbscissaValue.Value, loc.OrdinateValue.Value);
+            isConsoleFree = true;
         }
-    }
+
+        //temp
+        private static bool isConsoleFree = true;
+}
 }
