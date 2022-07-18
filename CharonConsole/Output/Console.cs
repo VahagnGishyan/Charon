@@ -11,6 +11,7 @@ namespace Output
         Space  = ' ',
         Fence  = 'F'
     }
+
     public class ConsolePoint
     {
         public ConsolePoint(char symbol,
@@ -45,73 +46,131 @@ namespace Output
 
     public static class Console
     {
-        public static void SetWindowSize(Utility.Size size)
+        private static void ThreadUnsafeSetWindowSize(Utility.Size size)
         {
             System.Console.SetWindowSize(size.WeightValue.Value, size.HeightValue.Value);
         }
 
-        public static void SetDefaultConsoleColor()
+        private static void ThreadUnsafeSetDefaultConsoleColor()
         {
             System.Console.ForegroundColor = ConsoleColor.White;
             System.Console.BackgroundColor = ConsoleColor.Black;
         }
 
-        public static void SetConsoleColor(System.ConsoleColor backgroundColor,
-                                                  System.ConsoleColor foregroundColor)
+        private static void ThreadUnsafeSetConsoleColor(System.ConsoleColor backgroundColor,
+                                                        System.ConsoleColor foregroundColor)
         {
             System.Console.BackgroundColor = backgroundColor;
             System.Console.ForegroundColor = foregroundColor;
         }
 
-
-        public static void SetDefaultCursorPosition()
+        private static void ThreadUnsafeSetDefaultCursorPosition()
         {
-            //if(Hero != null)
-            //{
-            //    SetCursorPositionInBorder(Hero.Loc);
-            //    //Console.SetCursorPosition(Hero.Loc.AbscissaValue.Value, Hero.Loc.OrdinateValue.Value);
-            //    return;
-            //}
-            // temp
             Location loc = new Location(new Ordinate(0), new Abscissa(0));
-            Console.SetCursorPosition(loc);
-            //Console.SetCursorPosition(Loc.AbscissaValue.Value, Loc.OrdinateValue.Value);
+            ThreadUnsafeSetCursorPosition(loc);
         }
 
-        public static void SetDefaultState()
-        {
-            SetDefaultCursorPosition();
-            Console.SetDefaultConsoleColor();
-        }
-
-        private static void Write(char symbol)
+        private static void ThreadUnsafeWrite(char symbol)
         {
             System.Console.Write(symbol);
         }
-        public static void Write(Utility.Location loc, char symbol)
+
+        private static void ThreadUnsafeWrite(ConsolePoint point)
         {
-            Console.SetCursorPosition(loc);
-            Output.Console.Write(symbol);
+            ThreadUnsafeSetConsoleColor(point.BackgroundColor, point.ForegroundColor);
+            ThreadUnsafeWrite(point.Symbol);
         }
 
-        private static void Write(ConsolePoint point)
+        private static void ThreadUnsafeSetCursorPosition(Location loc) // Safe
         {
-            Output.Console.SetConsoleColor(point.BackgroundColor, point.ForegroundColor);
-            Output.Console.Write(point.Symbol);
+            System.Console.SetCursorPosition(loc.AbscissaValue.Value, loc.OrdinateValue.Value);
         }
 
-        public static void Write(Utility.Location loc, ConsolePoint point)
+        private static void ThreadUnsafeSetDefaultState() // UnSafe, Impl
         {
-            Console.SetCursorPosition(loc);
-            Write(point);
+            ThreadUnsafeSetDefaultCursorPosition();
+            ThreadUnsafeSetDefaultConsoleColor();
         }
 
-        public static void SetCursorPosition(Location loc)
+        /////////////////////////////////////////////////////////////////////////////////////////
+        
+        public static void SetWindowSize(Utility.Size size)
         {
             while (!isConsoleFree) { Thread.Sleep(5); }
             isConsoleFree = false;
-            System.Console.SetCursorPosition(loc.AbscissaValue.Value, loc.OrdinateValue.Value);
+
+            System.Console.SetWindowSize(size.WeightValue.Value, size.HeightValue.Value);
+
             isConsoleFree = true;
+        }
+
+        public static void SetDefaultConsoleColor()
+        {
+            while (!isConsoleFree) { Thread.Sleep(5); }
+            isConsoleFree = false;
+
+            ThreadUnsafeSetDefaultConsoleColor();
+
+            isConsoleFree = true;
+        }
+
+        public static void SetConsoleColor(System.ConsoleColor backgroundColor,
+                                           System.ConsoleColor foregroundColor)
+        {
+            while (!isConsoleFree) { Thread.Sleep(5); }
+            isConsoleFree = false;
+
+            ThreadUnsafeSetConsoleColor(backgroundColor, foregroundColor);
+
+            isConsoleFree = true;
+        }
+
+        public static void SetDefaultCursorPosition()
+        {
+            while (!isConsoleFree) { Thread.Sleep(5); }
+            isConsoleFree = false;
+
+            ThreadUnsafeSetDefaultCursorPosition();
+
+            isConsoleFree = true;
+        }
+
+        public static void SetCursorPosition(Location loc) // Safe
+        {
+            while (!isConsoleFree) { Thread.Sleep(5); }
+            isConsoleFree = false;
+
+            ThreadUnsafeSetCursorPosition(loc);
+
+            isConsoleFree = true;
+        }
+
+        public static void SetDefaultState() // Safe
+        {
+            while (!isConsoleFree) { Thread.Sleep(5); }
+            isConsoleFree = false;
+
+            ThreadUnsafeSetDefaultState();
+
+            isConsoleFree = true;
+        }
+
+        public static void Write(Utility.Location loc, ConsolePoint point) // Safe
+        {
+            while (!isConsoleFree) { Thread.Sleep(5); }
+            isConsoleFree = false;
+
+            ThreadUnsafeSetConsoleColor(point.BackgroundColor, point.ForegroundColor);
+            ThreadUnsafeSetCursorPosition(loc);
+            ThreadUnsafeWrite(point);
+            ThreadUnsafeSetDefaultState();
+
+            isConsoleFree = true;
+        }
+
+        public static void Write(Utility.Location loc, char symbol) // Safe
+        {
+            Write(loc, new ConsolePoint(symbol));
         }
 
         //temp

@@ -29,7 +29,7 @@ namespace Runner
                 Process.UserPass();
             }
 
-            if(!Process.IsGameOver())
+            if(Process.IsGameOver())
             {
                 System.Console.ReadKey();
             }

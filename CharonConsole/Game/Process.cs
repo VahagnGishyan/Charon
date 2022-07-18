@@ -218,8 +218,7 @@ namespace Game
 
         public static void MoveCharectorInBorder(Charector charector)
         {
-            Output.Console.SetConsoleColor(charector.BackgroundColor, charector.ForegroundColor);
-            Process.WriteInBorder(charector.Loc, charector.Symbol);
+            Process.WriteInBorder(charector.Loc, new ConsolePoint(charector.Symbol, charector.ForegroundColor, charector.BackgroundColor));
             Output.Console.SetDefaultState();
         }
 
