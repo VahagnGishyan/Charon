@@ -54,11 +54,9 @@ namespace Game
                 ++loc.AbscissaValue.Value)
             {
                 loc.OrdinateValue.Value = upBorderOrd;
-                Output.Console.SetCursorPosition(loc);
-                Output.Console.Write(((char)ConsoleSymbols.Border));
+                Output.Console.Write(loc, ((char)ConsoleSymbols.Border));
                 loc.OrdinateValue.Value = downBorderOrd;
-                Output.Console.SetCursorPosition(loc);
-                Output.Console.Write(((char)ConsoleSymbols.Border));
+                Output.Console.Write(loc, ((char)ConsoleSymbols.Border));
             }
         }
 
@@ -74,11 +72,9 @@ namespace Game
                 ++loc.OrdinateValue.Value)
             {
                 loc.AbscissaValue.Value = leftBorderAbs;
-                Output.Console.SetCursorPosition(loc);
-                Output.Console.Write(((char)ConsoleSymbols.Border));
+                Output.Console.Write(loc, ((char)ConsoleSymbols.Border));
                 loc.AbscissaValue.Value = rightBorderAbs;
-                Output.Console.SetCursorPosition(loc);
-                Output.Console.Write(((char)ConsoleSymbols.Border));
+                Output.Console.Write(loc, ((char)ConsoleSymbols.Border));
             }
         }
 
@@ -108,26 +104,34 @@ namespace Game
                     {
                         continue;
                     }
-                    SetCursorPositionInBorder(loc);
-                    Output.Console.Write(cobj);
+                    Process.WriteInBorder(loc, cobj);
                 }
                 loc.AbscissaValue.Value = 0;
             }
             Output.Console.SetDefaultState();
         }
 
-
-        public static void StartGame()
+        
+        public static void StartGame() // dont use
         {
             // MainCharector-Hero
             PrintHero();
         }
 
+        public static void GameOver()
+        {
+            isGameOver = true;
+        }
+
+        public static bool IsGameOver()
+        {
+            return (isGameOver);
+        }
+
         public static void PrintHero()
         {
             Hero.Loc = Map.HeroStartLocation;
-            MoveCharectorInConsole(Hero);
-            Output.Console.SetDefaultState();
+            MoveCharectorInBorder(Hero);
         }
 
         public static bool IsWithinBorder(Location loc)
@@ -141,6 +145,27 @@ namespace Game
         public static bool IsMovable(Location loc)
         {
             return (IsWithinBorder(loc) && Map.IsMovable(loc));
+        }
+
+        private static Location GetIfMovableLocations(Location loc)
+        {
+            if(IsMovable(loc))
+            {
+                return loc;
+            }
+            return null;
+        }
+
+        private static List<Location> MovableLocations(Location loc)
+        {
+            List<Location> locations = new List<Location>();
+
+            AddIfMovableLocations(ref locations, Process.ShiftRight(loc));
+            AddIfMovableLocations(ref locations, Process.ShiftUp   (loc));
+            AddIfMovableLocations(ref locations, Process.ShiftLeft (loc));
+            AddIfMovableLocations(ref locations, Process.ShiftDown (loc));
+
+            return (locations);
         }
 
         public static bool IsBreakable(Location loc)
@@ -171,27 +196,40 @@ namespace Game
 
         public static void WriteInBorder(Location loc, char symbol, CtrlArg state = CtrlArg.Unset)
         {
-
-            SetCursorPositionInBorder(loc);
-            Output.Console.Write(symbol);
+            Output.Console.Write(new Location(new Ordinate(loc.OrdinateValue.Value + 1), 
+                                              new Abscissa(loc.AbscissaValue.Value + 1)),
+                symbol);
             if(state == CtrlArg.DefaultState)
             {
                 Output.Console.SetDefaultState();
             }
         }
 
-    public static void MoveCharectorInConsole(Charector charector)
+        public static void WriteInBorder(Location loc, ConsolePoint cpoint, CtrlArg state = CtrlArg.Unset)
         {
-            SetCursorPositionInBorder(charector.Loc);
+            Output.Console.Write(new Location(new Ordinate(loc.OrdinateValue.Value + 1),
+                                 new Abscissa(loc.AbscissaValue.Value + 1)),
+                                 cpoint);
+            if (state == CtrlArg.DefaultState)
+            {
+                Output.Console.SetDefaultState();
+            }
+        }
+
+        public static void MoveCharectorInBorder(Charector charector)
+        {
             Output.Console.SetConsoleColor(charector.BackgroundColor, charector.ForegroundColor);
-            Output.Console.Write(charector.Symbol);
+            Process.WriteInBorder(charector.Loc, charector.Symbol);
             Output.Console.SetDefaultState();
         }
 
-        public static void MoveCharectorInConsole(Charector charector, Location loc)
+        public static void MoveCharectorInBorder(Charector charector, Location loc)
         {
+            Output.Console.SetDefaultConsoleColor();
+            Process.WriteInBorder(charector.Loc, charector.LastSymbol);
             charector.Loc = loc;
-            MoveCharectorInConsole(charector);
+
+            MoveCharectorInBorder(charector);
         }
 
         private static Utility.Location.ShiftTo MoveCharectorDirection(System.ConsoleKeyInfo input)
@@ -221,12 +259,13 @@ namespace Game
 
             if (newLoc != null)
             {
-                if (IsWithinBorder(newLoc) && IsMovable(newLoc))
+                if (/*IsWithinBorder(newLoc) && */IsMovable(newLoc))
                 {
-                    SetCursorPositionInBorder(charector.Loc);
-                    Output.Console.Write(charector.LastSymbol);
-                    MoveCharectorInConsole(charector, newLoc);
-                    Output.Console.SetDefaultState();
+                    MoveCharectorInBorder(charector, newLoc);
+                    //SetCursorPositionInBorder(charector.Loc);
+                    //Output.Console.Write(charector.LastSymbol);
+                    //MoveCharectorInBorder(charector, newLoc);
+                    //Output.Console.SetDefaultState();
                 }
             }
         }
@@ -236,21 +275,21 @@ namespace Game
             MoveCharector(Hero, Input.Keyboard.LastPassedKey());
         }
 
-        private static void ShiftHorizontalVerticallAndWrite(Location loc, char symbol)
-        {
-            Location newloc = null;
+        //private static void ShiftHorizontalVerticallAndWrite(Location loc, char symbol)
+        //{
+        //    Location newloc = null;
 
-            //substep 1, horizontal
-            Output.Console.Write(symbol);
-            newloc = Utility.Location.Shift(loc, Location.ShiftTo.Left);
-            Output.Console.Write(symbol);
+        //    //substep 1, horizontal
+        //    Output.Console.Write(symbol);
+        //    newloc = Utility.Location.Shift(loc, Location.ShiftTo.Left);
+        //    Output.Console.Write(symbol);
 
-            //substep 2, verticall
-            newloc = Utility.Location.Shift(loc, Location.ShiftTo.Up);
-            Output.Console.Write(symbol);
-            newloc = Utility.Location.Shift(loc, Location.ShiftTo.Down);
-            Output.Console.Write(symbol);
-        }
+        //    //substep 2, verticall
+        //    newloc = Utility.Location.Shift(loc, Location.ShiftTo.Up);
+        //    Output.Console.Write(symbol);
+        //    newloc = Utility.Location.Shift(loc, Location.ShiftTo.Down);
+        //    Output.Console.Write(symbol);
+        //}
 
         private static List<Location> ChooseIfBreakable(List<Location> locations)
         {
@@ -431,7 +470,7 @@ namespace Game
             return (null);
         }
 
-        private static void AddLocation(ref List<Location> locations, Location loc)
+        private static void AddIfMovableLocations(ref List<Location> locations, Location loc)
         {
             if (loc != null)
             {
@@ -444,9 +483,9 @@ namespace Game
             Location loc = Hero.Loc;
             List<Location> locations = new List<Location>();
 
-            AddLocation(ref locations, Process.ShiftUp(loc));
-            AddLocation(ref locations, Process.ShiftRightUp(loc));
-            AddLocation(ref locations, Process.ShiftLeftUp(loc));
+            AddIfMovableLocations(ref locations, Process.ShiftUp(loc));
+            AddIfMovableLocations(ref locations, Process.ShiftRightUp(loc));
+            AddIfMovableLocations(ref locations, Process.ShiftLeftUp(loc));
 
             return (locations);
         }
@@ -456,9 +495,9 @@ namespace Game
             Location loc = Hero.Loc;
             List<Location> locations = new List<Location>();
 
-            AddLocation(ref locations, Process.ShiftRight(loc));
-            AddLocation(ref locations, Process.ShiftRightUp(loc));
-            AddLocation(ref locations, Process.ShiftRightDown(loc));
+            AddIfMovableLocations(ref locations, Process.ShiftRight(loc));
+            AddIfMovableLocations(ref locations, Process.ShiftRightUp(loc));
+            AddIfMovableLocations(ref locations, Process.ShiftRightDown(loc));
 
             return (locations);
         }
@@ -468,9 +507,9 @@ namespace Game
             Location loc = Hero.Loc;
             List<Location> locations = new List<Location>();
 
-            AddLocation(ref locations, Process.ShiftLeft(loc));
-            AddLocation(ref locations, Process.ShiftLeftUp(loc));
-            AddLocation(ref locations, Process.ShiftLeftDown(loc));
+            AddIfMovableLocations(ref locations, Process.ShiftLeft(loc));
+            AddIfMovableLocations(ref locations, Process.ShiftLeftUp(loc));
+            AddIfMovableLocations(ref locations, Process.ShiftLeftDown(loc));
 
             return (locations);
         }
@@ -480,9 +519,9 @@ namespace Game
             Location loc = Hero.Loc;
             List<Location> locations = new List<Location>();
 
-            AddLocation(ref locations, Process.ShiftDown(loc));
-            AddLocation(ref locations, Process.ShiftRightDown(loc));
-            AddLocation(ref locations, Process.ShiftLeftDown(loc));
+            AddIfMovableLocations(ref locations, Process.ShiftDown(loc));
+            AddIfMovableLocations(ref locations, Process.ShiftRightDown(loc));
+            AddIfMovableLocations(ref locations, Process.ShiftLeftDown(loc));
 
             return (locations);
         }
@@ -506,7 +545,7 @@ namespace Game
             List<Location> newLocations = new List<Location>();
             for(int index = 0; index < locations.Count; ++index)
             {
-                AddLocation(ref newLocations, Shift(locations[index], direction));
+                AddIfMovableLocations(ref newLocations, Shift(locations[index], direction));
             }
 
             return (newLocations);
@@ -598,9 +637,173 @@ namespace Game
             }
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////
+        // Zombies //
+        //////////////////////////////////////////////////////////////////////////////////////
+
+        private static List<Zomby> MakeNullZombies(int count)
+        {
+            List<Zomby> zombies = new List<Zomby>(count);
+            for(int index = 0; index < count; ++index)
+            {
+                zombies.Add(null);
+            }
+            return zombies;
+        }
+
+        public static void MakeZomby(List<Zomby> zombies, int index)
+        {
+            zombies[index] = new Zomby(Map.ZombyStartLocation);
+            MoveZombyInBorder(zombies[index], Map.ZombyStartLocation);
+        }
+
+        public static void MakeZombies()
+        {
+            //bool isAllDead = true;
+
+            for (int index = 0; index < Zombies.Count; ++index)
+            {
+                //if(Zombies[index] == null)
+                //{
+                MakeZomby(Zombies, index);
+                //}
+                //else if (!Zombies[index].Dead)
+                //{
+                //    isAllDead = false;
+                //}
+            }
+            //return (false);
+        }
+
+        public static void MTMakeZombies()
+        {
+            Thread thread = new Thread(MakeZombies);
+            thread.Start();
+        }
+
+        public static void KillZomby(Zomby zomby)
+        {
+            zomby.Dead = true;
+            WriteInBorder(zomby.Loc, ((char)Output.ConsoleSymbols.Space));
+        }
+
+        public static void MoveZombyInBorder(Zomby zomby, Location loc)
+        {
+            MoveCharectorInBorder(zomby, loc);
+            //if(zomby.Loc == Hero.Loc)
+            if (zomby.Loc.OrdinateValue.Value == Hero.Loc.OrdinateValue.Value &&
+                zomby.Loc.AbscissaValue.Value == Hero.Loc.AbscissaValue.Value)
+            {
+                Process.GameOver();
+            }
+            Thread.Sleep(50);
+        }
+        public static void MoveZombyInConsole(int index, Location loc)
+        {
+            MoveZombyInBorder(Zombies[index], loc);
+        }
+
+        public static void MoveZomby(Zomby zomby, Utility.Location.ShiftTo direct)
+        {
+            MoveZombyInBorder(zomby, Location.Shift(zomby.Loc, direct));
+        }
+        public static void MoveZomby(int index, Utility.Location.ShiftTo direct)
+        {
+            MoveZomby(Zombies[index], direct);
+        }
+
+        private static Location.ShiftTo MoveZombyRandomDirection(Zomby zomby, Random random)
+        {
+            List<Location> movableLocations = MovableLocations(zomby.Loc);
+            if (movableLocations == null || movableLocations.Count == 0)
+            {
+                return (Location.ShiftTo.Invalid);
+            }
+            else if (movableLocations.Count == 1)
+            {
+                return (Location.SolveDirection(zomby.Loc, movableLocations[0]));
+            }
+            else
+            {
+                int rInt = random.Next(0, movableLocations.Count);
+                return (Location.SolveDirection(zomby.Loc, movableLocations[rInt]));
+            }
+        }
+
+        public static void MoveZombies()
+        {
+            bool isAllDead;
+            while(Zombies != null)
+            {
+                isAllDead = true;
+                Random random = new Random();
+                for (int index = 0; index < Zombies.Count; ++index)
+                {
+                    if (Zombies[index] != null && Zombies[index].Dead != true)
+                    {
+                        isAllDead = false;
+                        Location.ShiftTo direction = MoveZombyRandomDirection(Zombies[index], random);
+                        if (direction == Location.ShiftTo.Right ||
+                            direction == Location.ShiftTo.Up ||
+                            direction == Location.ShiftTo.Left ||
+                            direction == Location.ShiftTo.Down
+                            )
+                        {
+                            MoveZomby(Zombies[index], direction);
+                            if(IsGameOver())
+                            {
+                                Zombies = null;
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            KillZomby(Zombies[index]);
+                        }
+                    }
+                }
+                if (isAllDead)
+                {
+                    Zombies = null;
+                }
+            }
+        }
+
+        public static void MTMoveZombies()
+        {
+            Thread thread = new Thread(MoveZombies);
+            while (Zombies != null && Zombies.Count > 0 && Zombies[0] == null) { Thread.Sleep(1); }
+            thread.Start();
+        }
+
+        public static void LetOutZombies()
+        {
+            int      zombiesMaxCount = 10;
+            Zombies = MakeNullZombies(zombiesMaxCount);
+
+            // make zombies
+            //MakeZombies();
+            MTMakeZombies();
+
+            // move zombies
+            //MoveZombies();
+            MTMoveZombies();
+        }
+
+        public static void MTLetOutZombies()
+        {
+            Thread thread = new Thread(LetOutZombies);
+            thread.Start();
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////
+
+        private static bool     isGameOver = false;
         private static Location Loc        { get; set; } = new Location(new Ordinate(0), new Abscissa(0));
         static Game.Map         Map        { get; set; }
-        static List<Charector>  Charectors { get; set; }
+        static List<Charector> Charectors { get; set; } // didn't use
+        static List<Zomby>      Zombies    { get; set; }
+
         static Charector        Hero       { get; set; }
     }
 }

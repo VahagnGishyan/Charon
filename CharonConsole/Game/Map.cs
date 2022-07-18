@@ -10,9 +10,10 @@ namespace Game
 
     public class Map
     {
-        public Map(Size size, Location heroLocation) 
+        public Map(Size size, Location heroLocation, Location zombyLocation) 
         {
-            HeroStartLocation = heroLocation;
+            HeroStartLocation  = heroLocation;
+            ZombyStartLocation = zombyLocation;
             Points = new ConsolePoint[size.HeightValue.Value, size.WeightValue.Value];
 
             for (int iLine = 0; iLine < size.HeightValue.Value; ++iLine)
@@ -51,7 +52,8 @@ namespace Game
             Points[loc.OrdinateValue.Value, loc.AbscissaValue.Value] = new ConsolePoint(point);
         }
 
-        public Location HeroStartLocation { get; }
+        public Location ZombyStartLocation { get; }
+        public Location HeroStartLocation  { get; }
 
         private ConsolePoint[,] Points { get; set; }
 
@@ -64,9 +66,10 @@ namespace Game
 
             //Size size = new Size(new Height(8), new Weight(8));
             Location heroStartLocation = new Location(new Ordinate(5), new Abscissa(5));
+            Location zombyLocation = new Location(new Ordinate(0), new Abscissa(0));
             //Location heroStartLocation = new Location(new Ordinate(23), new Abscissa(69));
 
-            return (new Map(size, heroStartLocation));
+            return (new Map(size, heroStartLocation, zombyLocation));
 
         }
 
@@ -91,8 +94,9 @@ namespace Game
             }
 
             Location heroStartLocation = new Location(new Ordinate(3), new Abscissa(4));
+            Location zombyStartLocation = new Location(new Ordinate(0), new Abscissa(0));
             Size size = new Size(new Height(strmap.Length), new Weight(strmap[0].Length));
-            Map map = new Map(size, heroStartLocation);
+            Map map = new Map(size, heroStartLocation, zombyStartLocation);
 
             for (int iLine = 0; iLine < size.HeightValue.Value; ++iLine)
             {

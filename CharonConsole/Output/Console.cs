@@ -84,20 +84,26 @@ namespace Output
             Console.SetDefaultConsoleColor();
         }
 
-        public static void Write(char symbol)
+        private static void Write(char symbol)
         {
             System.Console.Write(symbol);
         }
         public static void Write(Utility.Location loc, char symbol)
         {
             Console.SetCursorPosition(loc);
-            System.Console.Write(symbol);
+            Output.Console.Write(symbol);
         }
 
-        public static void Write(ConsolePoint point)
+        private static void Write(ConsolePoint point)
         {
             Output.Console.SetConsoleColor(point.BackgroundColor, point.ForegroundColor);
             Output.Console.Write(point.Symbol);
+        }
+
+        public static void Write(Utility.Location loc, ConsolePoint point)
+        {
+            Console.SetCursorPosition(loc);
+            Write(point);
         }
 
         public static void SetCursorPosition(Location loc)

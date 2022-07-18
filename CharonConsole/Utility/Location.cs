@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Utility
@@ -23,7 +24,9 @@ namespace Utility
     {
         public enum ShiftTo
         {
+            Invalid,
             Unset,
+            Stay,
 
             Right,
             Left,
@@ -71,6 +74,42 @@ namespace Utility
                 default          :                          break;
             }
             return (newloc);
+        }
+
+        public static ShiftTo SolveDirection(Location locFrom, Location locTo)
+        {
+            int ordDiff = locTo.OrdinateValue.Value - locFrom.OrdinateValue.Value;
+            int absDiff = locTo.AbscissaValue.Value - locFrom.AbscissaValue.Value;
+            if (Enumerable.Range(-1, 1).Contains(ordDiff) && 
+                Enumerable.Range(-1, 1).Contains(absDiff) &&
+                (ordDiff != absDiff)                      &&
+                (ordDiff == 0 || absDiff == 0)
+                ) 
+            {
+                return (ShiftTo.Invalid);
+            }
+            else if(ordDiff == 0)
+            {
+                if(absDiff == 1)
+                {
+                    return (ShiftTo.Right);
+                }
+                //else if(absDiff == -1)
+                //{
+                    return (ShiftTo.Left);
+                //}
+            }
+            else
+            {
+                if (ordDiff == 1)
+                {
+                    return (ShiftTo.Down);
+                }
+                //else if(ordDiff == -1)
+                //{
+                    return (ShiftTo.Up);
+                //}
+            }
         }
 
         public static Location ShiftRight(Location loc)

@@ -22,10 +22,20 @@ namespace Runner
             Process.PrintHero();
 
             //Process.StartGame();
+            Process.LetOutZombies();
             Process.UserPass();
-            while (!Input.Keyboard.IsPressedEscape())
+            while (!Input.Keyboard.IsPressedEscape() && !Process.IsGameOver())
             {
                 Process.UserPass();
+            }
+
+            if(!Process.IsGameOver())
+            {
+                System.Console.ReadKey();
+            }
+            if(Input.Keyboard.IsPressedEscape())
+            {
+                Process.GameOver();
             }
 
             Loger.WriteLineMessage("Close Main()");

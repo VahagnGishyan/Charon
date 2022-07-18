@@ -12,6 +12,7 @@ namespace Game
         public Charector(Location loc, char symbol, ConsoleColor foregroundColor, ConsoleColor backgroundColor) :
             base(loc, symbol, foregroundColor, backgroundColor)
         {
+            Dead = false;
             LastSymbol      = ((char)Output.ConsoleSymbols.Space);
         }
 
@@ -21,11 +22,14 @@ namespace Game
         }
 
         public char LastSymbol { get; set; }
+        public bool Dead       { get; set; }
     }
 
     public class Zomby : Charector
     {
-        public Zomby(Location loc, char symbol, ConsoleColor foregroundColor, ConsoleColor backgroundColor)
+        public Zomby(Location loc, char symbol = 'z', 
+            ConsoleColor foregroundColor = ConsoleColor.Red, 
+            ConsoleColor backgroundColor = ConsoleColor.Black)
             : base(loc, symbol, foregroundColor, backgroundColor)
         {
 
@@ -54,7 +58,7 @@ namespace Game
 
         static public Hero MakeDefault(Location loc = null)
         {
-            return (new Hero(loc, 'H', System.ConsoleColor.Green, System.ConsoleColor.Black)); ; ;
+            return (new Hero(loc, 'H', System.ConsoleColor.Green, System.ConsoleColor.Black));
         }
     }
 }
