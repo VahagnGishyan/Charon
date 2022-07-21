@@ -1,4 +1,5 @@
 Start Main()
+Make Map
         
         
  FF  FF 
@@ -7,6 +8,67 @@ Start Main()
   FFFF  
   FFFF  
   F  F  
+[Game].Process, Run LetOutZombies() in multithreading
 User input w
+User input w
+User input d
+User input d
+User input d
+User input S with shift
+User input d
+User input A with shift
+User input A with shift
+User input A with shift
+User input a
+User input A with shift
+User input a
+User input d
+User input d
+User input a
+User input d
+User input d
+User input A with shift
+User input A with shift
+User input A with shift
+User input A with shift
+User input A with shift
+User input A with shift
+User input A with shift
+User input A with shift
+User input A with shift
+User input A with shift
+User input A with shift
+User input A with shift
+User input A with shift
+User input a
+User input a
+User input a
+User input a
+User input a
+User input a
+User input a
+User input S with shift
+User input S with shift
+User input S with shift
+User input S with shift
+[Game].Process, in function MoveZombies(), all zombies is dead
+User input S with shift
+User input d
+User input d
+User input s
+User input d
+User input s
+User input s
+User input b
+User input s
+User input b
+User input b
+User input s
+User input b
+User input d
+User input b
+User input w
+User input d
+User input b
 User input Escape
 Close Main()

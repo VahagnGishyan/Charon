@@ -16,28 +16,25 @@ namespace Runner
 
             //Process.SetMap(Game.Content.MakeEmpty());
             Process.SetMap(Game.Content.Creeper());
-            Process.PrintBorder();
-            Process.PrintMap();
             Process.SetHero();
-            Process.PrintHero();
-
-            //Process.StartGame();
             Process.LetOutZombies();
-            Process.UserPass();
-            while (!Input.Keyboard.IsPressedEscape() && !Process.IsGameOver())
+            
+            do
             {
                 Process.UserPass();
             }
+            while (!Input.Keyboard.IsPressedEscape() && !Process.IsGameOver());
 
-            if(Process.IsGameOver())
-            {
-                System.Console.ReadKey();
-            }
-            if(Input.Keyboard.IsPressedEscape())
+            //if (Process.IsGameOver())
+            //{
+                //System.Console.ReadKey(); 
+            //}
+            if (Input.Keyboard.IsPressedEscape())
             {
                 Process.GameOver();
             }
 
+            System.Console.ReadKey();
             Loger.WriteLineMessage("Close Main()");
             Loger.Close();
         }
@@ -49,7 +46,7 @@ namespace Runner
 // Game.Map       <= Console          # Done
 // Game.Charactor <= Hero             # Done
 // Game.Map       <= Interactive      # ~Done
-// Game.Charactor <= Zombies          #
+// Game.Charactor <= Zombies          # Done
 // Game.Charactor <= Interactive Hero # Done
-// Game.Process   <= ReDesign         # 
+// Game.Process   <= ReDesign         # Done
 //

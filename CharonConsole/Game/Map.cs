@@ -4,17 +4,21 @@ using System.Text;
 
 using Utility;
 using Output;
+using System.Threading;
 
 namespace Game
 {
-
+    
     public class Map
     {
-        public Map(Size size, Location heroLocation, Location zombyLocation) 
+        public Map(Size size)
+        {
+            Points = new ConsolePoint[size.HeightValue.Value, size.WeightValue.Value];
+        }
+        public Map(Size size, Location heroLocation, Location zombyLocation) : this(size)
         {
             HeroStartLocation  = heroLocation;
             ZombyStartLocation = zombyLocation;
-            Points = new ConsolePoint[size.HeightValue.Value, size.WeightValue.Value];
 
             for (int iLine = 0; iLine < size.HeightValue.Value; ++iLine)
             {
@@ -25,32 +29,62 @@ namespace Game
             }
         }
 
+        private ConsolePoint GetPointFromContent(string[] content, Location loc)
+        {
+            char symbol = content[loc.OrdinateValue.Value][loc.AbscissaValue.Value];
+            if (symbol == '-' || symbol == ((char)Output.ConsoleSymbols.Space))
+            {
+                return (new ConsolePoint((char)Output.ConsoleSymbols.Space));
+            }
+            return (new ConsolePoint(symbol));
+        }
+
+        public Map(string[] content, Location heroLocation, Location zombyLocation) 
+            : this (new Size(new Height(content.Length), new Weight(content[0].Length)))
+        {
+            Size size          = GetSize();
+            HeroStartLocation  = heroLocation;
+            ZombyStartLocation = zombyLocation;
+
+            Location loc = Location.MakeZero();
+            for (; loc.OrdinateValue.Value < size.HeightValue.Value; ++loc.OrdinateValue.Value)
+            {
+                for (; loc.AbscissaValue.Value < size.WeightValue.Value; ++loc.AbscissaValue.Value)
+                {
+                    Points[loc.OrdinateValue.Value, loc.AbscissaValue.Value] = GetPointFromContent(content, loc);
+                }
+                loc.AbscissaValue.Value = 0;
+            }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////
+
+        public ConsolePoint GetPoint(Location loc)
+        {
+            return (new ConsolePoint(Points[loc.OrdinateValue.Value, loc.AbscissaValue.Value]));
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////
+
+        public void ChangePoint(Location loc, ConsolePoint point)
+        {
+            Points[loc.OrdinateValue.Value, loc.AbscissaValue.Value] = new ConsolePoint(point);
+        }
+
+        public void ChangePoint(Location loc, char point)
+        {
+            ChangePoint(loc, new ConsolePoint(point));
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////
+
         public Size GetSize()
         {
             //temp
             return (new Size(new Height(Points.GetLength(0)), new Weight(Points.GetLength(1))));
         }
 
-        public bool IsSpace(Location loc)
-        {
-            var symbol = Points[loc.OrdinateValue.Value, loc.AbscissaValue.Value].Symbol;
-            return (symbol == ((char)ConsoleSymbols.Space));
-        }
-        
-        public bool IsMovable(Location loc)
-        {
-            return (IsSpace(loc));
-        }
-
-        public ConsolePoint GetCPoint(Location loc)
-        {
-            return (Points[loc.OrdinateValue.Value, loc.AbscissaValue.Value]);
-        }
-
-        public void ChangePoint(Location loc, ConsolePoint point)
-        {
-            Points[loc.OrdinateValue.Value, loc.AbscissaValue.Value] = new ConsolePoint(point);
-        }
+        //////////////////////////////////////////////////////////////////////////////////////////
 
         public Location ZombyStartLocation { get; }
         public Location HeroStartLocation  { get; }
@@ -59,19 +93,19 @@ namespace Game
 
         //////////////////////////////////////////////////////////////////////
         
-        public static Map MakeEmpty()
-        {
-            Size size = new Size(new Height(10), new Weight(10));
-            //Size size = new Size(new Height(48), new Weight(140));
+        //public static Map MakeEmpty()
+        //{
+        //    Size size = new Size(new Height(10), new Weight(10));
+        //    //Size size = new Size(new Height(48), new Weight(140));
 
-            //Size size = new Size(new Height(8), new Weight(8));
-            Location heroStartLocation = new Location(new Ordinate(5), new Abscissa(5));
-            Location zombyLocation = new Location(new Ordinate(0), new Abscissa(0));
-            //Location heroStartLocation = new Location(new Ordinate(23), new Abscissa(69));
+        //    //Size size = new Size(new Height(8), new Weight(8));
+        //    Location heroStartLocation = new Location(new Ordinate(5), new Abscissa(5));
+        //    Location zombyLocation = new Location(new Ordinate(0), new Abscissa(0));
+        //    //Location heroStartLocation = new Location(new Ordinate(23), new Abscissa(69));
 
-            return (new Map(size, heroStartLocation, zombyLocation));
+        //    return (new Map(size, heroStartLocation, zombyLocation));
 
-        }
+        //}
 
         public static Map MakeCreeper()
         {
@@ -93,24 +127,11 @@ namespace Game
                 Loging.Loger.WriteLineMessage(line);
             }
 
-            Location heroStartLocation = new Location(new Ordinate(3), new Abscissa(4));
+            Location heroStartLocation  = new Location(new Ordinate(3), new Abscissa(4));
             Location zombyStartLocation = new Location(new Ordinate(0), new Abscissa(0));
-            Size size = new Size(new Height(strmap.Length), new Weight(strmap[0].Length));
-            Map map = new Map(size, heroStartLocation, zombyStartLocation);
 
-            for (int iLine = 0; iLine < size.HeightValue.Value; ++iLine)
-            {
-                for(int iItr = 0; iItr < size.WeightValue.Value; ++iItr)
-                {
-                    char symbol = strmap[iLine][iItr];
-                    if (symbol == '-')
-                    {
-                        map.Points[iLine, iItr].Symbol = ' ';
-                        continue;
-                    }
-                    map.Points[iLine, iItr].Symbol = strmap[iLine][iItr];
-                }
-            }
+            //Size size = new Size(new Height(strmap.Length), new Weight(strmap[0].Length));
+            Map  map = new Map(strmap, heroStartLocation, zombyStartLocation);
 
             return (map);
 

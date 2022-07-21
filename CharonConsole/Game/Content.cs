@@ -6,18 +6,18 @@ namespace Game
 {
     public static class Content
     {
-        public static Map MakeEmpty()
-        {
-            Game.Map map = Map.MakeEmpty();
+        //public static Map MakeEmpty()
+        //{
+        //    Game.Map map = Map.MakeEmpty();
 
-            //Process process = new Process();
-            //process.SetMap(map);
-            //Location myCharectorLocatin = new Location(new Ordinate(69), new Abscissa(23));
-            //process.AddHero(Game.Hero.MakeDefault(new Location(new Ordinate(5), new Abscissa(5))));
-            //process.AddHero(Game.Hero.MakeDefault());
+        //    //Process process = new Process();
+        //    //process.SetMap(map);
+        //    //Location myCharectorLocatin = new Location(new Ordinate(69), new Abscissa(23));
+        //    //process.AddHero(Game.Hero.MakeDefault(new Location(new Ordinate(5), new Abscissa(5))));
+        //    //process.AddHero(Game.Hero.MakeDefault());
 
-            return (map);
-        }
+        //    return (map);
+        //}
 
         public static Map Creeper()
         {

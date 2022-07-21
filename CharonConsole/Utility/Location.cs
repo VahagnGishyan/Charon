@@ -51,9 +51,20 @@ namespace Utility
 
         }
 
+        public static Location MakeZero()
+        {
+            return (new Location(new Ordinate(0), new Abscissa(0)));
+        }
+
         public static bool IsValid(Location loc)
         {
             return ((loc.OrdinateValue.Value >= 0) && (loc.AbscissaValue.Value >= 0));
+        }
+
+        public static bool IsEqual(Location left, Location right)
+        {
+            return (left.OrdinateValue.Value == right.OrdinateValue.Value &&
+                    left.AbscissaValue.Value == right.AbscissaValue.Value);
         }
 
         public static Location Shift(Location loc, ShiftTo key)
